@@ -8,14 +8,22 @@ PORT = 50000
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente.connect((HOST, PORT))
 
-# cliente digita email q quer mandar
+def handleMensagem():
+    msg = ''
+    linha = ''
+    while linha != '.':
+        linha = input()
+        msg += linha + '\n'
+    return msg
 
+# cliente digita email q quer mandar
+msg = ''
 # se estiver ok, conexao com o servidor termina, se não continua a conexão
-while msg != 'ok':
+while True:
     email = input("Digite o nome pra quem voce quer mandar email: ")
-    msg = input("Digite seu email: ")
-    cliente.send(str.encode("data "+ email + " " + msg))
+    print("Escreva a sua mensagem. Quando quiser terminar, pule uma linha e digite o caractere '.'")
+    msg = handleMensagem()
+    cliente.send(str.encode("data\n"+ email + "\n" + msg))
     dados = cliente.recv(1024)
     msg = dados.decode()
     print(msg)
-cliente.close()
